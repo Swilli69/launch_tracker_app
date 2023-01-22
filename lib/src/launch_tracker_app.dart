@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:launch_tracker_app/src/presentation/launches/launches_screen.dart';
+import 'package:launch_tracker_app/src/presentation/features/launches/launches_screen.dart';
 
 class LaunchTrackerApp extends StatelessWidget {
   const LaunchTrackerApp({Key? key}) : super(key: key);

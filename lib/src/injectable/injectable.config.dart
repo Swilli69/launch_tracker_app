@@ -14,7 +14,7 @@ import 'package:launch_tracker_app/src/data/repositories/launch_repository_impl.
 import 'package:launch_tracker_app/src/domain/repositories/launch_repository.dart'
     as _i5;
 import 'package:launch_tracker_app/src/injectable/register_modules.dart' as _i8;
-import 'package:launch_tracker_app/src/presentation/launches/launches_view_model.dart'
+import 'package:launch_tracker_app/src/presentation/features/launches/launches_view_model.dart'
     as _i7;
 
 /// ignore_for_file: unnecessary_lambdas

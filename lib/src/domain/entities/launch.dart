@@ -1,25 +1,24 @@
-import 'package:flutter/foundation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-@immutable
+part 'launch.g.dart';
+
+@JsonSerializable()
 class Launch {
   final String id;
   final String name;
-  final int launchTime;
+  @JsonKey(name: 'date_unix')
+  final int launchTimeUnix;
 
   const Launch(
     this.name,
     this.id,
-    this.launchTime,
+    this.launchTimeUnix,
   );
 
-  Launch.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        name = json['name'],
-        launchTime = json['date_unix'];
+  DateTime get launchDateTime =>
+      DateTime.fromMillisecondsSinceEpoch(launchTimeUnix * 1000);
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'date_unix': launchTime,
-      };
+  factory Launch.fromJson(Map<String, dynamic> json) => _$LaunchFromJson(json);
+
+  Map<String, dynamic> toJson() => _$LaunchToJson(this);
 }

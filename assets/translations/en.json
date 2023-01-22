@@ -1,2 +1,7 @@
 {
+  "launches": {
+    "upcoming_launches": "Upcoming Launches",
+    "mission": "Mission",
+    "date_utc": "Date (UTC)"
+  }
 }
