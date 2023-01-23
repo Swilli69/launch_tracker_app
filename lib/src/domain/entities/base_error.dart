@@ -1,3 +1,4 @@
 enum BaseError {
   loadingError,
+  shareError,
 }

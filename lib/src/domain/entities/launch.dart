@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 
 @immutable
@@ -16,6 +17,10 @@ class Launch {
 
   DateTime get launchDateTime =>
       DateTime.fromMillisecondsSinceEpoch(launchTimeUnix * 1000);
+
+  String get launchDateString => DateFormat(
+        datePrecision.resolve(day: 'dd/MM/yy', month: 'MM/yy', year: 'yy'),
+      ).format(launchDateTime);
 }
 
 enum DatePrecision {

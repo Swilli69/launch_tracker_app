@@ -9,5 +9,8 @@
     "hours": "Hours",
     "minutes": "Minutes",
     "seconds": "Seconds"
+  },
+  "share": {
+    "share_launch": "Hurry up, the {name} will be launched on {date}"
   }
 }

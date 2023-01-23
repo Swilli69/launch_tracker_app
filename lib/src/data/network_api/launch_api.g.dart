@@ -13,7 +13,7 @@ class _LaunchApi implements LaunchApi {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'https://api.spacexdata.com/v5/';
+    baseUrl ??= 'https://api.spacexdata.com/v4/';
   }
 
   final Dio _dio;

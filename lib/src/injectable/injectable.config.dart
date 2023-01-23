@@ -11,8 +11,12 @@ import 'package:injectable/injectable.dart' as _i2;
 import 'package:launch_tracker_app/src/data/network_api/launch_api.dart' as _i3;
 import 'package:launch_tracker_app/src/data/repositories/launch_repository_impl.dart'
     as _i6;
+import 'package:launch_tracker_app/src/data/services/share_service_impl.dart'
+    as _i9;
 import 'package:launch_tracker_app/src/domain/repositories/launch_repository.dart'
     as _i5;
+import 'package:launch_tracker_app/src/domain/services/share_service.dart'
+    as _i8;
 import 'package:launch_tracker_app/src/presentation/features/launches/launches_view_model.dart'
     as _i7;
 
@@ -34,6 +38,7 @@ extension GetItInjectableX on _i1.GetIt {
         () => _i6.LaunchRepositoryImpl(gh<_i3.LaunchApi>()));
     gh.factory<_i7.LaunchesViewModel>(
         () => _i7.LaunchesViewModel(gh<_i5.LaunchRepository>()));
+    gh.lazySingleton<_i8.ShareService>(() => _i9.ShareServiceImpl());
     return this;
   }
 }
