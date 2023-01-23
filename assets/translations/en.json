@@ -3,5 +3,11 @@
     "upcoming_launches": "Upcoming Launches",
     "mission": "Mission",
     "date_utc": "Date (UTC)"
+  },
+  "countdown": {
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Minutes",
+    "seconds": "Seconds"
   }
 }

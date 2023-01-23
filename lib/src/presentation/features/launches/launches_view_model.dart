@@ -20,7 +20,7 @@ class LaunchesViewModel extends ViewModel {
   Future<void> updateLaunches() async => _loadLaunches();
 
   Future<void> _loadLaunches() async {
-    return loadOperation(_launchRepository.fetchLaunches()).then(
+    return loadOperation(_launchRepository.getLaunches()).then(
       (value) => value.forEach(
         (loadedLaunches) {
           launches.value = loadedLaunches.sortByLaunchTime;

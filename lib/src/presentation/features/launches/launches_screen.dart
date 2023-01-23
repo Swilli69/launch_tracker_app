@@ -1,13 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:launch_tracker_app/src/domain/entities/launch.dart';
+import 'package:launch_tracker_app/src/presentation/common/theme/app_colors.dart';
 import 'package:launch_tracker_app/src/presentation/common/view_model/view.dart';
 import 'package:launch_tracker_app/src/presentation/common/view_model/view_model.dart';
+import 'package:launch_tracker_app/src/presentation/common/widgets/gradient_app_bar_widget.dart';
 import 'package:launch_tracker_app/src/presentation/common/widgets/loader_widget.dart';
 import 'package:launch_tracker_app/src/presentation/features/launches/launches_view_model.dart';
 import 'package:launch_tracker_app/src/presentation/features/launches/widgets/launch_list_item_widget.dart';
-import 'package:launch_tracker_app/src/presentation/theme/colors.dart';
-import 'package:launch_tracker_app/src/presentation/theme/text_styles.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
 
@@ -35,22 +37,9 @@ class LaunchesScreen extends View<LaunchesViewModel> {
               SliverAppBar(
                 expandedHeight: 100,
                 pinned: true,
-                flexibleSpace: Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                      colors: [AppColors.rouge, AppColors.darkPurple],
-                    ),
-                  ),
-                  child: FlexibleSpaceBar(
-                    centerTitle: true,
-                    expandedTitleScale: 1,
-                    title: Text(
-                      'launches.upcoming_launches'.tr(),
-                      style: TextStyles.whiteRegular22,
-                    ),
-                  ),
+                flexibleSpace: GradientAppBar(
+                  gradientColors: const [AppColors.rouge, AppColors.darkPurple],
+                  title: 'launches.upcoming_launches'.tr(),
                 ),
               ),
               CupertinoSliverRefreshControl(
@@ -75,8 +64,9 @@ class LaunchesScreen extends View<LaunchesViewModel> {
                           ...launches.map(
                             (launch) => LaunchListItem(
                               name: launch.name,
-                              time: DateFormat('dd/MM/yy')
-                                  .format(launch.launchDateTime),
+                              time: _getLaunchTime(launch),
+                              onTap: () =>
+                                  context.go('/countdown/${launch.id}'),
                               showDivider: launch.id != launches.last.id,
                             ),
                           )
@@ -89,4 +79,9 @@ class LaunchesScreen extends View<LaunchesViewModel> {
       ),
     );
   }
+
+  String _getLaunchTime(Launch launch) => DateFormat(
+        launch.datePrecision
+            .resolve(year: 'dd/MM/yy', month: 'MM/yy', day: 'yy'),
+      ).format(launch.launchDateTime);
 }

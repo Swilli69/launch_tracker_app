@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:launch_tracker_app/src/presentation/common/theme/app_colors.dart';
 import 'package:launch_tracker_app/src/presentation/common/widgets/platform_resolver_widget.dart';
-import 'package:launch_tracker_app/src/presentation/theme/colors.dart';
 
 class Loader extends StatelessWidget {
   const Loader({Key? key, this.size = 50}) : super(key: key);

@@ -13,7 +13,7 @@ class _LaunchApi implements LaunchApi {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'https://api.spacexdata.com/v4/';
+    baseUrl ??= 'https://api.spacexdata.com/v5/';
   }
 
   final Dio _dio;
@@ -21,13 +21,13 @@ class _LaunchApi implements LaunchApi {
   String? baseUrl;
 
   @override
-  Future<List<Launch>> getLaunches() async {
+  Future<List<LaunchModel>> getLaunches() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    final _result =
-        await _dio.fetch<List<dynamic>>(_setStreamType<List<Launch>>(Options(
+    final _result = await _dio
+        .fetch<List<dynamic>>(_setStreamType<List<LaunchModel>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -40,8 +40,31 @@ class _LaunchApi implements LaunchApi {
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     var value = _result.data!
-        .map((dynamic i) => Launch.fromJson(i as Map<String, dynamic>))
+        .map((dynamic i) => LaunchModel.fromJson(i as Map<String, dynamic>))
         .toList();
+    return value;
+  }
+
+  @override
+  Future<LaunchModel> getNextLaunch(id) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<LaunchModel>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'launches/${id}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = LaunchModel.fromJson(_result.data!);
     return value;
   }
 

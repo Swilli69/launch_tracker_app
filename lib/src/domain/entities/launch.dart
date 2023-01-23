@@ -1,24 +1,36 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:flutter/cupertino.dart';
 
-part 'launch.g.dart';
-
-@JsonSerializable()
+@immutable
 class Launch {
   final String id;
   final String name;
-  @JsonKey(name: 'date_unix')
+  final DatePrecision datePrecision;
   final int launchTimeUnix;
 
-  const Launch(
-    this.name,
-    this.id,
-    this.launchTimeUnix,
-  );
+  const Launch({
+    required this.id,
+    required this.name,
+    required this.datePrecision,
+    required this.launchTimeUnix,
+  });
 
   DateTime get launchDateTime =>
       DateTime.fromMillisecondsSinceEpoch(launchTimeUnix * 1000);
+}
 
-  factory Launch.fromJson(Map<String, dynamic> json) => _$LaunchFromJson(json);
+enum DatePrecision {
+  year,
+  month,
+  day;
 
-  Map<String, dynamic> toJson() => _$LaunchToJson(this);
+  T resolve<T>({required T year, required T month, required T day}) {
+    switch (this) {
+      case DatePrecision.year:
+        return year;
+      case DatePrecision.month:
+        return month;
+      case DatePrecision.day:
+        return day;
+    }
+  }
 }

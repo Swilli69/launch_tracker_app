@@ -14,9 +14,23 @@ class LaunchRepositoryImpl extends LaunchRepository {
   final LaunchApi _launchApi;
 
   @override
-  Future<Either<BaseError, List<Launch>>> fetchLaunches() async {
+  Future<Either<BaseError, List<Launch>>> getLaunches() async {
     try {
-      return _launchApi.getLaunches().then((value) => Right(value));
+      return _launchApi.getLaunches().then(
+            (value) =>
+                Right(value.map((launchModel) => launchModel.launch).toList()),
+          );
+    } catch (e) {
+      return const Left(BaseError.loadingError);
+    }
+  }
+
+  @override
+  Future<Either<BaseError, Launch>> getLaunch(String id) async {
+    try {
+      return _launchApi
+          .getNextLaunch(id)
+          .then((launchModel) => Right(launchModel.launch));
     } catch (e) {
       return const Left(BaseError.loadingError);
     }

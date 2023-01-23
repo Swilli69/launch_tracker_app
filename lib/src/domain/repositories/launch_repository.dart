@@ -5,5 +5,7 @@ import 'package:launch_tracker_app/src/domain/entities/base_error.dart';
 abstract class LaunchRepository {
   const LaunchRepository();
 
-  Future<Either<BaseError, List<Launch>>> fetchLaunches();
+  Future<Either<BaseError, List<Launch>>> getLaunches();
+
+  Future<Either<BaseError, Launch>> getLaunch(String id);
 }
