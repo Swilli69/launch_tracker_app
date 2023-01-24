@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:launch_tracker_app/src/presentation/common/theme/app_colors.dart';
 import 'package:launch_tracker_app/src/presentation/common/theme/text_styles.dart';
 
-const double actionsWidth = 60;
+const double actionWidth = 60;
 
 class GradientAppBar extends StatelessWidget {
   const GradientAppBar({
@@ -10,13 +10,13 @@ class GradientAppBar extends StatelessWidget {
     required this.gradientColors,
     required this.title,
     this.hasLeading = false,
-    this.action,
+    this.actions,
   }) : super(key: key);
 
   final List<Color> gradientColors;
   final String title;
   final bool hasLeading;
-  final Widget? action;
+  final List<Widget>? actions;
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +36,9 @@ class GradientAppBar extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              SizedBox(
-                width: actionsWidth,
+              Container(
+                alignment: Alignment.centerLeft,
+                width: actionWidth,
                 child: hasLeading
                     ? const BackButton(color: AppColors.white)
                     : null,
@@ -54,10 +55,16 @@ class GradientAppBar extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
-                width: actionsWidth,
-                child: action,
-              )
+              if (actions?.isEmpty ?? true)
+                const SizedBox(width: actionWidth)
+              else
+                ...actions!
+                  ..forEach(
+                    (action) => SizedBox(
+                      width: actionWidth,
+                      child: action,
+                    ),
+                  )
             ],
           ),
         ),

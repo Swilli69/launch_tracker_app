@@ -10,9 +10,9 @@ class ShareButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final vm = context.read<CountdownViewModel>();
 
-    return GestureDetector(
-      onTap: vm.shareLaunch,
-      child: const Icon(Icons.share, color: AppColors.white),
+    return IconButton(
+      icon: const Icon(Icons.share, color: AppColors.white),
+      onPressed: vm.shareLaunch,
     );
   }
 }

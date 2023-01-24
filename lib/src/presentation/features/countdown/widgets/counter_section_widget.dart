@@ -19,6 +19,7 @@ class CounterSection extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ValueListenableBuilder(
             valueListenable: counterValue,

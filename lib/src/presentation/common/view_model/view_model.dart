@@ -8,7 +8,7 @@ enum LoadingState {
   error,
 }
 
-class ViewModel {
+abstract class ViewModel {
   LoadingState loadingState = LoadingState.none;
 
   Future<Either<BaseError, T>> loadOperation<T>(

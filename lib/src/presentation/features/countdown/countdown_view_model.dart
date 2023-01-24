@@ -1,18 +1,21 @@
 import 'package:flutter/cupertino.dart';
+import 'package:injectable/injectable.dart';
 import 'package:launch_tracker_app/src/domain/entities/launch.dart';
 import 'package:launch_tracker_app/src/domain/repositories/launch_repository.dart';
 import 'package:launch_tracker_app/src/domain/services/share_service.dart';
 import 'package:launch_tracker_app/src/presentation/common/view_model/view_model.dart';
 
+@injectable
 class CountdownViewModel extends ViewModel {
   CountdownViewModel(
-    this.launchId,
+    @factoryParam this.launchId,
     this._launchRepository,
     this._shareService,
   ) {
     _timeLeftBeforeLaunch.addListener(_updateTimeLeftValues);
     _initCounterStream();
     _loadLaunch();
+    _checkFavorite();
   }
 
   final String launchId;
@@ -25,11 +28,19 @@ class CountdownViewModel extends ViewModel {
   final ValueNotifier<int?> hoursLeft = ValueNotifier(null);
   final ValueNotifier<int?> minutesLeft = ValueNotifier(null);
   final ValueNotifier<int?> secondsLeft = ValueNotifier(null);
+  final ValueNotifier<bool> isFavorite = ValueNotifier(false);
 
-  Future<void> shareLaunch() async {
+  void shareLaunch() {
     if (launch.value != null) {
       _shareService.shareLaunch(launch.value!);
     }
+  }
+
+  void toggleFavorite() {
+    isFavorite.value
+        ? _launchRepository.removeFromFavorite(launchId)
+        : _launchRepository.addToFavorite(launchId);
+    isFavorite.value = !isFavorite.value;
   }
 
   Future<void> _loadLaunch() async {
@@ -37,6 +48,17 @@ class CountdownViewModel extends ViewModel {
       (value) => value.forEach(
         (loadedLaunch) {
           launch.value = loadedLaunch;
+          _updateTimeLeft();
+        },
+      ),
+    );
+  }
+
+  Future<void> _checkFavorite() async {
+    return loadOperation(_launchRepository.getFavorites()).then(
+      (value) => value.forEach(
+        (favorites) {
+          isFavorite.value = favorites.contains(launchId);
           _updateTimeLeft();
         },
       ),

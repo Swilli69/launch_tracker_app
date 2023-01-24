@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:launch_tracker_app/src/presentation/features/countdown/countdown_screen.dart';
 import 'package:launch_tracker_app/src/presentation/features/launches/launches_screen.dart';
-import 'package:go_router/go_router.dart';
+import 'package:routemaster/routemaster.dart';
 
 class LaunchTrackerApp extends StatelessWidget {
   const LaunchTrackerApp({Key? key}) : super(key: key);
@@ -13,24 +13,19 @@ class LaunchTrackerApp extends StatelessWidget {
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
-      routerConfig: GoRouter(
-        routes: [
-          GoRoute(
-            path: '/',
-            builder: (context, state) => const LaunchesScreen(),
-            routes: [
-              GoRoute(
-                path: 'countdown/:launchId',
-                builder: (
-                  context,
-                  state,
-                ) =>
-                    CountdownScreen(launchId: state.params['launchId']!),
-              )
-            ],
-          ),
-        ],
+      routerDelegate: RoutemasterDelegate(
+        routesBuilder: (context) => RouteMap(
+          routes: {
+            '/': (_) => const MaterialPage(child: LaunchesScreen()),
+            '/countdown/:launchId': (params) => MaterialPage(
+                  child: CountdownScreen(
+                    launchId: params.pathParameters['launchId']!,
+                  ),
+                ),
+          },
+        ),
       ),
+      routeInformationParser: const RoutemasterParser(),
     );
   }
 }

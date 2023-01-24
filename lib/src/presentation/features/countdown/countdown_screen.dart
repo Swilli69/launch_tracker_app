@@ -7,6 +7,7 @@ import 'package:launch_tracker_app/src/presentation/common/widgets/gradient_back
 import 'package:launch_tracker_app/src/presentation/common/widgets/loader_widget.dart';
 import 'package:launch_tracker_app/src/presentation/features/countdown/countdown_view_model.dart';
 import 'package:launch_tracker_app/src/presentation/features/countdown/widgets/counter_widget.dart';
+import 'package:launch_tracker_app/src/presentation/common/widgets/favorite_button_widget.dart';
 import 'package:launch_tracker_app/src/presentation/features/countdown/widgets/share_button_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -36,7 +37,13 @@ class CountdownScreen extends View<CountdownViewModel> {
                         ],
                         title: launch!.name,
                         hasLeading: true,
-                        action: const ShareButton(),
+                        actions: [
+                          FavoriteButton(
+                            isFavorite: vm.isFavorite,
+                            onPress: vm.toggleFavorite,
+                          ),
+                          const ShareButton(),
+                        ],
                       ),
                       leadingWidth: 60,
                       automaticallyImplyLeading: false,

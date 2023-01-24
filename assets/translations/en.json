@@ -2,7 +2,9 @@
   "launches": {
     "upcoming_launches": "Upcoming Launches",
     "mission": "Mission",
-    "date_utc": "Date (UTC)"
+    "date_utc": "Date (UTC)",
+    "no_launches": "Oh no, we don't have launches anymore",
+    "no_favorite_launches": "Seems like you don't like launches ;("
   },
   "countdown": {
     "days": "Days",
