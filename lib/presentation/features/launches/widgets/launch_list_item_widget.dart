@@ -12,11 +12,11 @@ class LaunchListItem extends StatelessWidget {
     this.onTap,
   }) : super(key: key);
 
-  factory LaunchListItem.header() => LaunchListItem(
-        name: 'launches.mission'.tr(),
-        time: 'launches.date_utc'.tr(),
-        showDivider: true,
-      );
+  LaunchListItem.header({super.key})
+      : name = 'launches.mission'.tr(),
+        time = 'launches.date_utc'.tr(),
+        showDivider = true,
+        onTap = null;
 
   final String name;
   final String time;

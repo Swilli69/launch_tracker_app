@@ -3,8 +3,8 @@ import 'package:launch_tracker_app/presentation/common/theme/app_colors.dart';
 import 'package:launch_tracker_app/presentation/common/view_model/view.dart';
 import 'package:launch_tracker_app/presentation/common/view_model/view_model.dart';
 import 'package:launch_tracker_app/presentation/common/widgets/gradient_app_bar_widget.dart';
-import 'package:launch_tracker_app/presentation/common/widgets/sliver_failed_loading_widget.dart';
 import 'package:launch_tracker_app/presentation/common/widgets/gradient_background_widget.dart';
+import 'package:launch_tracker_app/presentation/common/widgets/icon_text_placeholder_widget.dart';
 import 'package:launch_tracker_app/presentation/common/widgets/loader_widget.dart';
 import 'package:launch_tracker_app/presentation/common/widgets/sliver_refresh_indicator_widget.dart';
 import 'package:launch_tracker_app/presentation/features/countdown/countdown_view_model.dart';
@@ -61,7 +61,7 @@ class CountdownScreen extends View<CountdownViewModel> {
                     ),
                     slivers: [
                       SliverRefreshIndicator(onRefresh: vm.refreshLaunch),
-                      const SliverFailedLoading(),
+                      IconTextPlaceholder.failedLoading(),
                     ],
                   )
                 : loadingState == LoadingState.loading

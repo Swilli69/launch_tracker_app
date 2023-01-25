@@ -10,25 +10,21 @@ class LaunchesViewModel extends ViewModel {
   LaunchesViewModel(
     this._launchRepository,
   ) {
-    showFavorite.addListener(_filterLaunches);
-    _allLaunches.addListener(_filterLaunches);
-    _favoriteLaunches.addListener(_filterLaunches);
+    allLaunches.addListener(_updateFavoriteLaunches);
+    _favoriteLaunchesIdes.addListener(_updateFavoriteLaunches);
     _loadLaunches();
     _loadFavorites();
   }
 
   final LaunchRepository _launchRepository;
 
-  final ValueNotifier<List<Launch>> filteredLaunches = ValueNotifier([]);
-  final ValueNotifier<bool> showFavorite = ValueNotifier(false);
-  final ValueNotifier<List<String>> _favoriteLaunches = ValueNotifier([]);
-  final ValueNotifier<List<Launch>> _allLaunches = ValueNotifier([]);
+  final ValueNotifier<List<Launch>> favoriteLaunches = ValueNotifier([]);
+  final ValueNotifier<List<String>> _favoriteLaunchesIdes = ValueNotifier([]);
+  final ValueNotifier<List<Launch>> allLaunches = ValueNotifier([]);
 
   Future<void> updateLaunches() async => _loadLaunches(showLoader: false);
 
   Future<void> updateFavorites() async => _loadFavorites();
-
-  void toggleShowFavorite() => showFavorite.value = !showFavorite.value;
 
   Future<void> _loadLaunches({bool showLoader = true}) async {
     return loadOperation(
@@ -37,7 +33,7 @@ class LaunchesViewModel extends ViewModel {
     ).then(
       (value) => value.forEach(
         (loadedLaunches) {
-          _allLaunches.value = loadedLaunches.sortByLaunchTime;
+          allLaunches.value = loadedLaunches.sortByLaunchTime;
         },
       ),
     );
@@ -47,21 +43,17 @@ class LaunchesViewModel extends ViewModel {
     return loadOperation(_launchRepository.getFavorites()).then(
       (value) => value.forEach(
         (favorites) {
-          _favoriteLaunches.value = favorites;
+          _favoriteLaunchesIdes.value = favorites;
         },
       ),
     );
   }
 
-  void _filterLaunches() {
-    if (showFavorite.value) {
-      filteredLaunches.value = _allLaunches.value
-          .where(
-            (launch) => _favoriteLaunches.value.contains(launch.id),
-          )
-          .toList();
-    } else {
-      filteredLaunches.value = _allLaunches.value;
-    }
+  void _updateFavoriteLaunches() {
+    favoriteLaunches.value = allLaunches.value
+        .where(
+          (launch) => _favoriteLaunchesIdes.value.contains(launch.id),
+        )
+        .toList();
   }
 }

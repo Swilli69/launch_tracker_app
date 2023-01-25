@@ -10,65 +10,74 @@ class GradientAppBar extends StatelessWidget {
     required this.gradientColors,
     required this.title,
     this.hasLeading = false,
+    this.bottom,
     this.actions,
   }) : super(key: key);
 
   final List<Color> gradientColors;
   final String title;
   final bool hasLeading;
+  final Widget? bottom;
   final List<Widget>? actions;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-          colors: gradientColors,
-        ),
-      ),
-      child: FlexibleSpaceBar(
-        centerTitle: true,
-        expandedTitleScale: 1,
-        titlePadding: const EdgeInsets.only(top: 30),
-        title: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Container(
-                alignment: Alignment.centerLeft,
-                width: actionWidth,
-                child: hasLeading
-                    ? const BackButton(color: AppColors.white)
-                    : null,
+    return Column(
+      children: [
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: gradientColors,
               ),
-              Expanded(
-                child: Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    title,
-                    textAlign: TextAlign.center,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                    style: TextStyles.whiteRegular22,
-                  ),
+            ),
+            child: FlexibleSpaceBar(
+              centerTitle: true,
+              expandedTitleScale: 1,
+              titlePadding: const EdgeInsets.only(top: 30),
+              title: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      width: actionWidth,
+                      child: hasLeading
+                          ? const BackButton(color: AppColors.white)
+                          : null,
+                    ),
+                    Expanded(
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: Text(
+                          title,
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                          style: TextStyles.whiteRegular22,
+                        ),
+                      ),
+                    ),
+                    if (actions?.isEmpty ?? true)
+                      const SizedBox(width: actionWidth)
+                    else
+                      ...actions!
+                        ..forEach(
+                          (action) => SizedBox(
+                            width: actionWidth,
+                            child: action,
+                          ),
+                        )
+                  ],
                 ),
               ),
-              if (actions?.isEmpty ?? true)
-                const SizedBox(width: actionWidth)
-              else
-                ...actions!
-                  ..forEach(
-                    (action) => SizedBox(
-                      width: actionWidth,
-                      child: action,
-                    ),
-                  )
-            ],
+            ),
           ),
         ),
-      ),
+        if (bottom != null) bottom!,
+      ],
     );
   }
 }
