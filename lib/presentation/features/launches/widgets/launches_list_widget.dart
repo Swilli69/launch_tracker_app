@@ -37,7 +37,7 @@ class LaunchesList extends StatelessWidget {
         slivers: [
           SliverRefreshIndicator(onRefresh: onRefresh),
           vm.loadingState.value == LoadingState.error
-              ?  IconTextPlaceholder.failedLoading()
+              ? IconTextPlaceholder.failedLoading()
               : launches.isEmpty
                   ? emptyPlaceholder
                   : SliverList(
@@ -51,9 +51,7 @@ class LaunchesList extends StatelessWidget {
                               onTap: () => Routemaster.of(context)
                                   .push('/countdown/${launch.id}')
                                   .result
-                                  .then(
-                                    (value) => vm.updateFavorites(),
-                                  ),
+                                  .then((value) => vm.updateFavorites()),
                               showDivider: launch.id != launches.last.id,
                             ),
                           )

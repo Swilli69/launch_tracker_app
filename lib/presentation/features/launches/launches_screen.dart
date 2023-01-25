@@ -65,7 +65,12 @@ class LaunchesScreen extends View<LaunchesViewModel> {
                             ),
                           ),
                         ),
-                        const SliverPadding(padding: EdgeInsets.only(top: 46)),
+                        SliverPadding(
+                          padding: EdgeInsets.only(
+                            top: appBarCollapsedHeight -
+                                MediaQuery.of(context).padding.top / 2,
+                          ),
+                        ),
                       ];
                     },
                     body: SafeArea(
