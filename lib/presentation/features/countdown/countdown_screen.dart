@@ -3,8 +3,10 @@ import 'package:launch_tracker_app/presentation/common/theme/app_colors.dart';
 import 'package:launch_tracker_app/presentation/common/view_model/view.dart';
 import 'package:launch_tracker_app/presentation/common/view_model/view_model.dart';
 import 'package:launch_tracker_app/presentation/common/widgets/gradient_app_bar_widget.dart';
+import 'package:launch_tracker_app/presentation/common/widgets/sliver_failed_loading_widget.dart';
 import 'package:launch_tracker_app/presentation/common/widgets/gradient_background_widget.dart';
 import 'package:launch_tracker_app/presentation/common/widgets/loader_widget.dart';
+import 'package:launch_tracker_app/presentation/common/widgets/sliver_refresh_indicator_widget.dart';
 import 'package:launch_tracker_app/presentation/features/countdown/countdown_view_model.dart';
 import 'package:launch_tracker_app/presentation/features/countdown/widgets/counter_widget.dart';
 import 'package:launch_tracker_app/presentation/common/widgets/favorite_button_widget.dart';
@@ -22,38 +24,52 @@ class CountdownScreen extends View<CountdownViewModel> {
     final vm = context.read<CountdownViewModel>();
 
     return ValueListenableBuilder(
-      valueListenable: vm.launch,
-      builder: (context, launch, widget) =>
-          vm.loadingState == LoadingState.loading
-              ? const Loader()
-              : Scaffold(
-                  appBar: PreferredSize(
-                    preferredSize: const Size.fromHeight(100.0),
-                    child: AppBar(
-                      flexibleSpace: GradientAppBar(
-                        gradientColors: const [
-                          AppColors.macawBlueGreen,
-                          AppColors.riverBed
-                        ],
-                        title: launch!.name,
-                        hasLeading: true,
-                        actions: [
-                          FavoriteButton(
-                            isFavorite: vm.isFavorite,
-                            onPress: vm.toggleFavorite,
-                          ),
-                          const ShareButton(),
-                        ],
-                      ),
-                      leadingWidth: 60,
-                      automaticallyImplyLeading: false,
+      valueListenable: vm.loadingState,
+      builder: (context, loadingState, widget) => ValueListenableBuilder(
+        valueListenable: vm.launch,
+        builder: (context, launch, widget) => Scaffold(
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(100.0),
+            child: AppBar(
+              flexibleSpace: GradientAppBar(
+                gradientColors: const [
+                  AppColors.macawBlueGreen,
+                  AppColors.riverBed
+                ],
+                title: launch?.name ?? '',
+                hasLeading: true,
+                actions: launch != null
+                    ? [
+                        FavoriteButton(
+                          isFavorite: vm.isFavorite,
+                          onPress: vm.toggleFavorite,
+                        ),
+                        const ShareButton(),
+                      ]
+                    : null,
+              ),
+              leadingWidth: 60,
+              automaticallyImplyLeading: false,
+            ),
+          ),
+          body: GradientBackground(
+            colors: const [AppColors.gableGreen, AppColors.dark],
+            child: loadingState == LoadingState.error
+                ? CustomScrollView(
+                    physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics(),
                     ),
-                  ),
-                  body: const GradientBackground(
-                    colors: [AppColors.gableGreen, AppColors.dark],
-                    child: Counter(),
-                  ),
-                ),
+                    slivers: [
+                      SliverRefreshIndicator(onRefresh: vm.refreshLaunch),
+                      const SliverFailedLoading(),
+                    ],
+                  )
+                : loadingState == LoadingState.loading
+                    ? const Loader()
+                    : const Counter(),
+          ),
+        ),
+      ),
     );
   }
 }

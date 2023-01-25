@@ -21,10 +21,9 @@ class LaunchRepositoryImpl extends LaunchRepository {
   @override
   Future<Either<BaseError, List<Launch>>> getLaunches() async {
     try {
-      return _launchApi.getLaunches().then(
+      return await _launchApi.getLaunches().then(
             (value) =>
-                Right(value.map((launchModel) => launchModel.launch).toList()),
-          );
+                Right(value.map((launchModel) => launchModel.launch).toList()));
     } catch (e) {
       return const Left(BaseError.loadingError);
     }
@@ -33,7 +32,7 @@ class LaunchRepositoryImpl extends LaunchRepository {
   @override
   Future<Either<BaseError, Launch>> getLaunch(String id) async {
     try {
-      return _launchApi
+      return await _launchApi
           .getNextLaunch(id)
           .then((launchModel) => Right(launchModel.launch));
     } catch (e) {

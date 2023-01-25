@@ -36,6 +36,8 @@ class CountdownViewModel extends ViewModel {
     }
   }
 
+  Future<void> refreshLaunch() async => _loadLaunch();
+
   void toggleFavorite() {
     isFavorite.value
         ? _launchRepository.removeFromFavorite(launchId)

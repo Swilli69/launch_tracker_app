@@ -24,14 +24,17 @@ class LaunchesViewModel extends ViewModel {
   final ValueNotifier<List<String>> _favoriteLaunches = ValueNotifier([]);
   final ValueNotifier<List<Launch>> _allLaunches = ValueNotifier([]);
 
-  Future<void> updateLaunches() async => _loadLaunches();
+  Future<void> updateLaunches() async => _loadLaunches(showLoader: false);
 
   Future<void> updateFavorites() async => _loadFavorites();
 
   void toggleShowFavorite() => showFavorite.value = !showFavorite.value;
 
-  Future<void> _loadLaunches() async {
-    return loadOperation(_launchRepository.getLaunches()).then(
+  Future<void> _loadLaunches({bool showLoader = true}) async {
+    return loadOperation(
+      _launchRepository.getLaunches(),
+      showLoader: showLoader,
+    ).then(
       (value) => value.forEach(
         (loadedLaunches) {
           _allLaunches.value = loadedLaunches.sortByLaunchTime;
