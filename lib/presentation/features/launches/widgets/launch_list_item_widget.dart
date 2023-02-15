@@ -2,19 +2,20 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:launch_tracker_app/presentation/common/theme/app_colors.dart';
 import 'package:launch_tracker_app/presentation/common/theme/text_styles.dart';
+import 'package:launch_tracker_app/translations/locale_keys.g.dart';
 
 class LaunchListItem extends StatelessWidget {
   const LaunchListItem({
-    Key? key,
+    super.key,
     required this.name,
     required this.time,
     this.showDivider = false,
     this.onTap,
-  }) : super(key: key);
+  });
 
   LaunchListItem.header({super.key})
-      : name = 'launches.mission'.tr(),
-        time = 'launches.date_utc'.tr(),
+      : name = LocaleKeys.launches_mission.tr(),
+        time = LocaleKeys.launches_date_utc.tr(),
         showDivider = true,
         onTap = null;
 
@@ -24,14 +25,13 @@ class LaunchListItem extends StatelessWidget {
   final VoidCallback? onTap;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context) => Container(
       height: 60,
       padding: const EdgeInsets.symmetric(horizontal: 15),
       decoration: showDivider
           ? const BoxDecoration(
               border: Border(
-                bottom: BorderSide(color: AppColors.white, width: 1),
+                bottom: BorderSide(color: AppColors.white),
               ),
             )
           : null,
@@ -60,5 +60,4 @@ class LaunchListItem extends StatelessWidget {
         ),
       ),
     );
-  }
 }

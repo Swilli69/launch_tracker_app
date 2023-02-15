@@ -6,23 +6,22 @@ import 'package:launch_tracker_app/presentation/common/widgets/loader_widget.dar
 
 class SliverRefreshIndicator extends StatelessWidget {
   const SliverRefreshIndicator({
-    Key? key,
+    super.key,
     required this.onRefresh,
-  }) : super(key: key);
+  });
+
   final AsyncCallback onRefresh;
 
   @override
-  Widget build(BuildContext context) {
-    return CupertinoSliverRefreshControl(
-      onRefresh: onRefresh,
-      builder: (
-        context,
-        refreshState,
-        pulledExtent,
-        refreshTriggerPullDistance,
-        refreshIndicatorExtent,
-      ) =>
-          Loader(size: min(30, pulledExtent)),
-    );
-  }
+  Widget build(BuildContext context) => CupertinoSliverRefreshControl(
+        onRefresh: onRefresh,
+        builder: (
+          context,
+          refreshState,
+          pulledExtent,
+          refreshTriggerPullDistance,
+          refreshIndicatorExtent,
+        ) =>
+            Loader(size: min(30, pulledExtent)),
+      );
 }

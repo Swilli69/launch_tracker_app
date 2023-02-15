@@ -5,27 +5,25 @@ import 'package:launch_tracker_app/presentation/features/launches/launches_scree
 import 'package:routemaster/routemaster.dart';
 
 class LaunchTrackerApp extends StatelessWidget {
-  const LaunchTrackerApp({Key? key}) : super(key: key);
+  const LaunchTrackerApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp.router(
-      localizationsDelegates: context.localizationDelegates,
-      supportedLocales: context.supportedLocales,
-      locale: context.locale,
-      routerDelegate: RoutemasterDelegate(
-        routesBuilder: (context) => RouteMap(
-          routes: {
-            '/': (_) => const MaterialPage(child: LaunchesScreen()),
-            '/countdown/:launchId': (params) => MaterialPage(
-                  child: CountdownScreen(
-                    launchId: params.pathParameters['launchId']!,
+  Widget build(BuildContext context) => MaterialApp.router(
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
+        routerDelegate: RoutemasterDelegate(
+          routesBuilder: (context) => RouteMap(
+            routes: {
+              '/': (_) => const MaterialPage(child: LaunchesScreen()),
+              '/countdown/:launchId': (params) => MaterialPage(
+                    child: CountdownScreen(
+                      launchId: params.pathParameters['launchId']!,
+                    ),
                   ),
-                ),
-          },
+            },
+          ),
         ),
-      ),
-      routeInformationParser: const RoutemasterParser(),
-    );
-  }
+        routeInformationParser: const RoutemasterParser(),
+      );
 }

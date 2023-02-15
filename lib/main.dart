@@ -7,8 +7,8 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   runApp(
-    DependenciesWidget(
-      child: const Localization(
+    const DependenciesWidget(
+      child: Localization(
         child: LaunchTrackerApp(),
       ),
     ),

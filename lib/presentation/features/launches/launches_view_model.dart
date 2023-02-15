@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 import 'package:launch_tracker_app/domain/entities/launch.dart';
@@ -12,8 +14,9 @@ class LaunchesViewModel extends ViewModel {
   ) {
     allLaunches.addListener(_updateFavoriteLaunches);
     _favoriteLaunchesIdes.addListener(_updateFavoriteLaunches);
+    loadingState.value = LoadingState.loading;
     _loadLaunches();
-    _loadFavorites();
+    _subscribeFavorites();
   }
 
   final LaunchRepository _launchRepository;
@@ -22,38 +25,41 @@ class LaunchesViewModel extends ViewModel {
   final ValueNotifier<List<String>> _favoriteLaunchesIdes = ValueNotifier([]);
   final ValueNotifier<List<Launch>> allLaunches = ValueNotifier([]);
 
-  Future<void> updateLaunches() async => _loadLaunches(showLoader: false);
+  late final StreamSubscription<List<String>> _favoritesSubscription;
 
-  Future<void> updateFavorites() async => _loadFavorites();
+  Future<void> updateLaunches() async => _loadLaunches();
 
-  Future<void> _loadLaunches({bool showLoader = true}) async {
-    return loadOperation(
-      _launchRepository.getLaunches(),
-      showLoader: showLoader,
-    ).then(
-      (value) => value.forEach(
-        (loadedLaunches) {
-          allLaunches.value = loadedLaunches.sortByLaunchTime;
-        },
-      ),
-    );
-  }
+  Future<void> updateFavorites() async => _subscribeFavorites();
 
-  Future<void> _loadFavorites() async {
-    return loadOperation(_launchRepository.getFavorites()).then(
-      (value) => value.forEach(
-        (favorites) {
-          _favoriteLaunchesIdes.value = favorites;
-        },
-      ),
-    );
-  }
+  Future<void> _loadLaunches() async => _launchRepository.getLaunches().then(
+          (value) => value.fold(
+            (l) {
+              loadingState.value = LoadingState.error;
+            },
+            (loadedLaunches) {
+              allLaunches.value = loadedLaunches.sortByLaunchTime;
+              loadingState.value = LoadingState.success;
+            },
+          ),
+        );
+
+  Future<void> _subscribeFavorites() async =>
+      _favoritesSubscription = _launchRepository.favoritesStream
+          .listen((ides) => _favoriteLaunchesIdes.value = ides);
 
   void _updateFavoriteLaunches() {
     favoriteLaunches.value = allLaunches.value
-        .where(
-          (launch) => _favoriteLaunchesIdes.value.contains(launch.id),
-        )
+        .where((launch) => _favoriteLaunchesIdes.value.contains(launch.id))
         .toList();
+  }
+
+  @override
+  void dispose() {
+    favoriteLaunches.dispose();
+    _favoriteLaunchesIdes.dispose();
+    allLaunches.dispose();
+    _favoritesSubscription.cancel();
+
+    super.dispose();
   }
 }

@@ -14,8 +14,8 @@ class CountdownViewModel extends ViewModel {
   ) {
     _timeLeftBeforeLaunch.addListener(_updateTimeLeftValues);
     _initCounterStream();
-    _loadLaunch();
     _checkFavorite();
+    _loadLaunch();
   }
 
   final String launchId;
@@ -46,26 +46,25 @@ class CountdownViewModel extends ViewModel {
   }
 
   Future<void> _loadLaunch() async {
-    return loadOperation(_launchRepository.getLaunch(launchId)).then(
-      (value) => value.forEach(
-        (loadedLaunch) {
-          launch.value = loadedLaunch;
-          _updateTimeLeft();
-        },
-      ),
-    );
+    loadingState.value = LoadingState.loading;
+
+    return _launchRepository.getLaunch(launchId).then(
+          (value) => value.fold((l) {
+            loadingState.value = LoadingState.error;
+          }, (loadedLaunch) {
+            launch.value = loadedLaunch;
+            _updateTimeLeft();
+            loadingState.value = LoadingState.success;
+
+          }),
+        );
   }
 
-  Future<void> _checkFavorite() async {
-    return loadOperation(_launchRepository.getFavorites()).then(
-      (value) => value.forEach(
-        (favorites) {
-          isFavorite.value = favorites.contains(launchId);
-          _updateTimeLeft();
-        },
-      ),
-    );
-  }
+  Future<void> _checkFavorite() async => _launchRepository.favoritesStream.forEach((favorites) {
+        isFavorite.value = favorites.contains(launchId);
+        _updateTimeLeft();
+        loadingState.value = LoadingState.success;
+      });
 
   void _initCounterStream() {
     Stream.periodic(const Duration(seconds: 1))
@@ -85,5 +84,18 @@ class CountdownViewModel extends ViewModel {
       minutesLeft.value = timeLeft.inMinutes - (timeLeft.inHours * 60);
       secondsLeft.value = timeLeft.inSeconds - (timeLeft.inMinutes * 60);
     }
+  }
+
+  @override
+  void dispose() {
+    _timeLeftBeforeLaunch.dispose();
+    launch.dispose();
+    daysLeft.dispose();
+    hoursLeft.dispose();
+    minutesLeft.dispose();
+    secondsLeft.dispose();
+    isFavorite.dispose();
+
+    super.dispose();
   }
 }

@@ -5,20 +5,18 @@ import 'package:launch_tracker_app/presentation/common/widgets/loader_widget.dar
 
 class CounterSection extends StatelessWidget {
   const CounterSection({
-    Key? key,
+    super.key,
     required this.name,
     required this.counterValue,
-  }) : super(key: key);
+  });
 
   final String name;
   final ValueNotifier<int?> counterValue;
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
+  Widget build(BuildContext context) => Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ValueListenableBuilder(
@@ -45,5 +43,4 @@ class CounterSection extends StatelessWidget {
         ],
       ),
     );
-  }
 }

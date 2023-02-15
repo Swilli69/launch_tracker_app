@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:launch_tracker_app/presentation/common/theme/app_colors.dart';
 import 'package:launch_tracker_app/presentation/common/view_model/view.dart';
 import 'package:launch_tracker_app/presentation/common/view_model/view_model.dart';
+import 'package:launch_tracker_app/presentation/common/widgets/favorite_button_widget.dart';
 import 'package:launch_tracker_app/presentation/common/widgets/gradient_app_bar_widget.dart';
 import 'package:launch_tracker_app/presentation/common/widgets/gradient_background_widget.dart';
 import 'package:launch_tracker_app/presentation/common/widgets/icon_text_placeholder_widget.dart';
@@ -9,19 +10,17 @@ import 'package:launch_tracker_app/presentation/common/widgets/loader_widget.dar
 import 'package:launch_tracker_app/presentation/common/widgets/sliver_refresh_indicator_widget.dart';
 import 'package:launch_tracker_app/presentation/features/countdown/countdown_view_model.dart';
 import 'package:launch_tracker_app/presentation/features/countdown/widgets/counter_widget.dart';
-import 'package:launch_tracker_app/presentation/common/widgets/favorite_button_widget.dart';
 import 'package:launch_tracker_app/presentation/features/countdown/widgets/share_button_widget.dart';
-import 'package:provider/provider.dart';
 
-class CountdownScreen extends View<CountdownViewModel> {
+class CountdownScreen extends ViewPage<CountdownViewModel> {
   const CountdownScreen({
-    Key? key,
+    super.key,
     required String launchId,
-  }) : super(key: key, param1: launchId);
+  }) : super(param1: launchId);
 
   @override
   Widget buildWidget(BuildContext context) {
-    final vm = context.read<CountdownViewModel>();
+    final vm = getVM(context);
 
     return ValueListenableBuilder(
       valueListenable: vm.loadingState,

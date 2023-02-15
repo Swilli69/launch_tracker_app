@@ -2,16 +2,17 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:launch_tracker_app/presentation/common/theme/app_colors.dart';
 import 'package:launch_tracker_app/presentation/common/theme/text_styles.dart';
+import 'package:launch_tracker_app/translations/locale_keys.g.dart';
 
 class IconTextPlaceholder extends StatelessWidget {
   const IconTextPlaceholder({
-    Key? key,
+    super.key,
     required this.text,
     required this.iconData,
-  }) : super(key: key);
+  });
 
   IconTextPlaceholder.failedLoading({super.key})
-      : text = ('common.loading_error').tr(),
+      : text = LocaleKeys.common_loading_error.tr(),
         iconData = Icons.wifi_off_outlined;
 
   const IconTextPlaceholder.noLaunches({super.key, required this.text})
@@ -21,8 +22,7 @@ class IconTextPlaceholder extends StatelessWidget {
   final IconData iconData;
 
   @override
-  Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
+  Widget build(BuildContext context) => SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(30, 20, 30, 0),
         child: Column(
@@ -43,5 +43,4 @@ class IconTextPlaceholder extends StatelessWidget {
         ),
       ),
     );
-  }
 }

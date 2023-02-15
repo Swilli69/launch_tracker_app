@@ -3,8 +3,9 @@ import 'package:get_it/get_it.dart';
 import 'package:launch_tracker_app/presentation/common/view_model/view_model.dart';
 import 'package:provider/provider.dart';
 
-abstract class View<VM extends ViewModel> extends StatelessWidget {
-  const View({
+abstract class ViewPage<VM extends ViewModel> extends StatelessWidget
+    with ViewWidget<VM> {
+  const ViewPage({
     required super.key,
     this.param1,
     this.param2,
@@ -14,14 +15,16 @@ abstract class View<VM extends ViewModel> extends StatelessWidget {
   final dynamic param2;
 
   @override
-  Widget build(BuildContext context) {
-    return Provider<VM>(
+  Widget build(BuildContext context) => Provider<VM>(
       create: (_) => context.read<GetIt>()<VM>(param1: param1, param2: param2),
       child: Builder(
         builder: (context) => buildWidget(context),
       ),
     );
-  }
 
   Widget buildWidget(BuildContext context);
+}
+
+mixin ViewWidget<VM extends ViewModel> {
+  VM getVM(BuildContext context) => context.read<VM>();
 }
